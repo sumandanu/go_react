@@ -1,0 +1,11 @@
+export { FrontPage } from './Front';
+export { ErrorPage } from './ErrorPage';
+export { NewsAskPage } from './NewsAsk';
+export { NewestPage } from './Newest';
+export { NewsItemPage } from './NewsItem';
+export { NewsPage } from './News';
+export { NewcommentsPage } from './Newcomments';
+export { NewsguidelinesPage } from './Newsguidelines';
+export { NewsfaqPage } from './Newsfaq';
+export { NewsShowPage } from './NewsShow';
+export { SecurityPage } from './Security';
