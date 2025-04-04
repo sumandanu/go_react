@@ -1,4 +1,11 @@
-.PHONY: build start
+.PHONY: start
+
+init:
+	@echo "Init backend..."
+	@cd apps/backend && go mod tidy -v
+	
+	@echo "Init frontend..."
+	@cd apps/frontend && npm install
 
 build:
 	@echo "Building backend..."
