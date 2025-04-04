@@ -2,6 +2,7 @@ package models
 
 type News struct {
 	Id            string `json:"id"`
+	VoteUrl       string `json:"voteUrl"`
 	Title         string `json:"title"`
 	TitleUrl      string `json:"titleUrl"`
 	Site          string `json:"site"`
@@ -13,5 +14,6 @@ type News struct {
 	AgeUrl        string `json:"ageUrl"`
 	HideUrl       string `json:"hideUrl"`
 	PastUrl       string `json:"pastUrl"`
+	Comments   	  string `json:"comments"`
 	CommentsUrl   string `json:"commentsUrl"`
   }
