@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
+	"strings"
 	"sync"
 
 	"github.com/gin-gonic/gin"
@@ -27,9 +27,9 @@ func (sc *ScrapeController) ScrapeNews(c *gin.Context) {
 	var results []models.News
   
 	collector.OnHTML("tr.athing.submission",func(h *colly.HTMLElement) {
-		fmt.Println(h)
 		news := models.News {
 			Id:    		h.Attr("id"),
+			No: 		h.ChildText("span.rank"), 
 			VoteUrl: 	h.ChildAttr("a#up_"+h.Attr("id"), "href"),
 			Title:      h.ChildText("span.titleline a"), 
 			TitleUrl:   h.ChildAttr("span.titleline a", "href"),
@@ -42,7 +42,6 @@ func (sc *ScrapeController) ScrapeNews(c *gin.Context) {
 	})
   
 	collector.OnHTML("td.subtext",func(h *colly.HTMLElement) {
-		// fmt.Println(h)
 		results[h.Index].Score = h.ChildText("span.score")
 		h.ForEach("a", func(_ int, e *colly.HTMLElement) {
 			if e.Index == 0 {
@@ -70,7 +69,7 @@ func (sc *ScrapeController) ScrapeNews(c *gin.Context) {
 		nextLink = h.Attr("href")
 	})
   
-	err := collector.Visit("https://news.ycombinator.com/news")
+	err := collector.Visit(strings.Replace(c.Request.URL.String(), "/api/v1", "https://news.ycombinator.com", -1))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -89,9 +88,9 @@ func (sc *ScrapeController) ScrapeNewest(c *gin.Context) {
 	var results []models.News
   
 	collector.OnHTML("tr.athing.submission",func(h *colly.HTMLElement) {
-		// fmt.Println(h)
 		news := models.News {
 			Id:    		h.Attr("id"),
+			No: 		h.ChildText("span.rank"), 
 	  	}
 		h.ForEach("a", func(_ int, e *colly.HTMLElement) {
 			
@@ -145,7 +144,7 @@ func (sc *ScrapeController) ScrapeNewest(c *gin.Context) {
 		nextLink = h.Attr("href")
 	})
   
-	err := collector.Visit("https://news.ycombinator.com/newest")
+	err := collector.Visit(strings.Replace(c.Request.URL.String(), "/api/v1", "https://news.ycombinator.com", -1))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -164,7 +163,6 @@ func (sc *ScrapeController) ScrapeFront(c *gin.Context) {
 	var results []models.News
   
 	collector.OnHTML("tr.athing.submission",func(h *colly.HTMLElement) {
-		// fmt.Println(h)
 		news := models.News {
 			Id:    		h.Attr("id"),
 	  	}
@@ -220,7 +218,7 @@ func (sc *ScrapeController) ScrapeFront(c *gin.Context) {
 		nextLink = h.Attr("href")
 	})
   
-	err := collector.Visit("https://news.ycombinator.com/front")
+	err := collector.Visit(strings.Replace(c.Request.URL.String(), "/api/v1", "https://news.ycombinator.com", -1))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -239,9 +237,9 @@ func (sc *ScrapeController) ScrapeNewcomments(c *gin.Context) {
 	var results []models.Comment
   
 	collector.OnHTML("tr.athing",func(h *colly.HTMLElement) {
-		fmt.Println(h.ChildAttr("span.onstory a","title"))
 		comment := models.Comment {
 			Id:    		h.Attr("id"),
+			No: 		h.ChildText("span.rank"), 
 			VoteUrl: 	h.ChildAttr("a#up_"+h.Attr("id"), "href"),
 			ByUser: 	h.ChildText("a.hnuser"),
 			ByUrl: 		h.ChildAttr("a.hnuser", "href"),
@@ -261,7 +259,7 @@ func (sc *ScrapeController) ScrapeNewcomments(c *gin.Context) {
 		nextLink = h.Attr("href")
 	})
   
-	err := collector.Visit("https://news.ycombinator.com/newcomments")
+	err := collector.Visit(strings.Replace(c.Request.URL.String(), "/api/v1", "https://news.ycombinator.com", -1))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -272,7 +270,7 @@ func (sc *ScrapeController) ScrapeNewcomments(c *gin.Context) {
 }
 
 func (sc *ScrapeController) ScrapeItemcomments(c *gin.Context) {
-	id := c.Query("id")
+	// id := c.Query("id")
 	collector := colly.NewCollector(
 		colly.AllowedDomains("news.ycombinator.com"),
 	)
@@ -282,9 +280,8 @@ func (sc *ScrapeController) ScrapeItemcomments(c *gin.Context) {
 	var results []models.Comment
 
 	collector.OnHTML("table.fatitem",func(h *colly.HTMLElement) {
-		fmt.Println( h.ChildAttr("tr.athing.submission","id"))
-
 		submission.Id = h.ChildAttr("tr.athing.submission","id")
+		submission.No = h.ChildText("span.rank")
 		submission.VoteUrl = h.ChildAttr("a#up_"+ h.ChildAttr("tr.athing.submission","id"), "href")
 		submission.Title = h.ChildText("span.titleline > a")
 		submission.TitleUrl = h.ChildAttr("span.titleline a", "href")
@@ -347,10 +344,6 @@ func (sc *ScrapeController) ScrapeItemcomments(c *gin.Context) {
 			Age: 		h.ChildText("span.age a"),
 			AgeUrl: 	h.ChildAttr("span.age a", "href"),
 			NextUrl: 	h.ChildAttr("span.navs > a", "href"),
-			// ParentUrl: 	h.ChildAttr("span.navs a","href"),
-			// ContextUrl: "context?id="+h.Attr("id"),
-			// OnStory:	h.ChildAttr("span.onstory a", "title"), 
-			// OnStoryUrl:	h.ChildAttr("span.onstory a", "href"),
 			Comment:  	h.ChildText("div.commtext.c00"),
 	  	}
 		results = append(results, comment)
@@ -361,7 +354,8 @@ func (sc *ScrapeController) ScrapeItemcomments(c *gin.Context) {
 		nextLink = h.Attr("href")
 	})
   
-	err := collector.Visit("https://news.ycombinator.com/item?id="+id)
+	err := collector.Visit(strings.Replace(c.Request.URL.String(), "/api/v1", "https://news.ycombinator.com", -1))
+	// err := collector.Visit("https://news.ycombinator.com/item?id="+id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -380,9 +374,9 @@ func (sc *ScrapeController) ScrapeAsks(c *gin.Context) {
 	var results []models.News
 
 	collector.OnHTML("tr.athing.submission",func(h *colly.HTMLElement) {
-		// fmt.Println(h)
 		news := models.News {
 			Id:    		h.Attr("id"),
+			No: 		h.ChildText("span.rank"), 
 	  	}
 		h.ForEach("a", func(_ int, e *colly.HTMLElement) {
 			
@@ -428,7 +422,8 @@ func (sc *ScrapeController) ScrapeAsks(c *gin.Context) {
 		nextLink = h.Attr("href")
 	})
   
-	err := collector.Visit("https://news.ycombinator.com/ask")
+	err := collector.Visit(strings.Replace(c.Request.URL.String(), "/api/v1", "https://news.ycombinator.com", -1))
+	// err := collector.Visit("https://news.ycombinator.com/ask")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -447,9 +442,9 @@ func (sc *ScrapeController) ScrapeShow(c *gin.Context) {
 	var results []models.News
   
 	collector.OnHTML("tr.athing.submission",func(h *colly.HTMLElement) {
-		// fmt.Println(h)
 		news := models.News {
 			Id:    		h.Attr("id"),
+			No: 		h.ChildText("span.rank"), 
 	  	}
 		h.ForEach("a", func(_ int, e *colly.HTMLElement) {
 			
@@ -495,7 +490,8 @@ func (sc *ScrapeController) ScrapeShow(c *gin.Context) {
 		nextLink = h.Attr("href")
 	})
   
-	err := collector.Visit("https://news.ycombinator.com/front")
+	err := collector.Visit(strings.Replace(c.Request.URL.String(), "/api/v1", "https://news.ycombinator.com", -1))
+	// err := collector.Visit("https://news.ycombinator.com/front")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -514,9 +510,9 @@ func (sc *ScrapeController) ScrapeJobs(c *gin.Context) {
 	var results []models.News
   
 	collector.OnHTML("tr.athing.submission",func(h *colly.HTMLElement) {
-		fmt.Println(h)
 		news := models.News {
 			Id:    		h.Attr("id"),
+			No: 		h.ChildText("span.rank"), 
 			VoteUrl: 	h.ChildAttr("a#up_"+h.Attr("id"), "href"),
 			Title:      h.ChildText("span.titleline a"), 
 			TitleUrl:   h.ChildAttr("span.titleline a", "href"),
@@ -529,7 +525,6 @@ func (sc *ScrapeController) ScrapeJobs(c *gin.Context) {
 	})
   
 	collector.OnHTML("td.subtext",func(h *colly.HTMLElement) {
-		// fmt.Println(h)
 		results[h.Index].Score = h.ChildText("span.score")
 		h.ForEach("a", func(_ int, e *colly.HTMLElement) {
 			if e.Index == 0 {
@@ -557,7 +552,8 @@ func (sc *ScrapeController) ScrapeJobs(c *gin.Context) {
 		nextLink = h.Attr("href")
 	})
   
-	err := collector.Visit("https://news.ycombinator.com/jobs")
+	err := collector.Visit(strings.Replace(c.Request.URL.String(), "/api/v1", "https://news.ycombinator.com", -1))
+	// err := collector.Visit("https://news.ycombinator.com/jobs")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

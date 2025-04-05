@@ -1,6 +1,7 @@
 package models
 
 type Comment struct {
+	No            string `json:"no"`
 	Id            string `json:"id"`
 	VoteUrl       string `json:"voteUrl"`
 	ByUser        string `json:"byUser"`
