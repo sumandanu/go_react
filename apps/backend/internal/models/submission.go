@@ -1,6 +1,7 @@
 package models
 
 type Submission struct {
+	No            	string `json:"no"`
 	Id            	string `json:"id"`
 	VoteUrl       	string `json:"voteUrl"`
 	Title         	string `json:"title"`

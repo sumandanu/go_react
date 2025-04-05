@@ -1,4 +1,5 @@
 export interface IComment {
+  no?: string;
   id: string;
   voteUrl: string;
   byUser: string;

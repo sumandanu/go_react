@@ -56,6 +56,8 @@ a {
 .more {
   color: #000000;
   text-decoration: none;
-  margin-inline: 40px;
-  padding-bottom: 20px;
+  margin-inline: 60px;
+  padding: 0px;
+  width: fit-content;
+  background-color: transparent;
 }

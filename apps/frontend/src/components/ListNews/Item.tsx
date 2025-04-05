@@ -4,7 +4,7 @@ import { INews } from '../../interface/INews';
 
 const Item: React.FC<INews> = (props) => {
   return (
-    <li key={props.id}>
+    <li key={props.id} value={props.no}>
       <div className={styles.card}>
         <Link to={`/${props.voteUrl}`}>
           <div className={styles.votearrow} title="upvote"></div>

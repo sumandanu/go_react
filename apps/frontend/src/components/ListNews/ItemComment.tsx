@@ -4,7 +4,7 @@ import { IComment } from '../../interface/IComment';
 
 const ItemComment: React.FC<IComment> = (props) => {
   return (
-    <li key={props.id} style={{ listStyleType: 'none' }}>
+    <li key={props.id} style={{ listStyleType: 'none' }} value={props.no}>
       <div className={styles.card}>
         <Link to={`/${props.voteUrl}`}>
           <div className={styles.votearrow} title="upvote"></div>

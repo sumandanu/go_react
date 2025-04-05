@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-
 import { INews } from '../../interface/INews';
 import styles from './Styles.module.css';
 import Item from './Item';
@@ -9,12 +7,13 @@ import { IComment } from '../../interface/IComment';
 interface Props {
   type?: 'comment' | 'news' | undefined;
   data: INews[] | IComment[];
-  nextLink?: string;
+  showMore?: boolean;
+  onMoreClick?: () => void;
 }
 
 const ListNews: React.FC<Props> = (props) => {
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
       <ol>
         {props.data.map((list) =>
           props?.type === 'comment' ? (
@@ -24,10 +23,13 @@ const ListNews: React.FC<Props> = (props) => {
           )
         )}
       </ol>
-      <Link to={`/${props?.nextLink}`} className={styles.more}>
+      <button
+        onClick={props?.onMoreClick}
+        className={styles.more}
+        style={{ display: !props?.showMore ? 'none' : 'block' }}>
         More
-      </Link>
-    </>
+      </button>
+    </div>
   );
 };
 
