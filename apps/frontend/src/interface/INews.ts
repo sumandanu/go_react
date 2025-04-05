@@ -1,4 +1,5 @@
 export interface INews {
+  no?: string;
   id?: string;
   voteUrl?: string;
   title?: string;
