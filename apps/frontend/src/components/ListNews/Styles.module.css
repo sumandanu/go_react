@@ -48,6 +48,7 @@ a span:hover {
   font-family: Verdana, Geneva, sans-serif;
   font-size: 10pt;
   color: #222020;
+  word-break: break-all;
 }
 
 .siteText {
