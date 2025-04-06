@@ -36,7 +36,7 @@ function Navbar() {
           </Link>
         </li>
         {menus.map((menu) => (
-          <li>
+          <li key={menu.url}>
             <Link to={menu.url} className={`${pathname === menu.url && styles.active}`}>
               {menu.label}
             </Link>
