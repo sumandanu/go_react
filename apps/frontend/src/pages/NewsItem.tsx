@@ -24,10 +24,21 @@ export const NewsItemPage: FC = () => {
         <li style={{ marginBottom: '10px', listStyleType: 'none' }}>
           <div style={{ display: 'flex', flexDirection: 'column', color: 'graytext' }}>
             <div style={{ display: 'inline-flex', gap: 10, alignItems: 'end' }}>
-              <Link to={submission.titleUrl} style={{ color: '#000000', textDecoration: 'none' }}>
+              <Link
+                to={
+                  submission.titleUrl?.startsWith('https')
+                    ? submission.titleUrl
+                    : `/${submission.titleUrl}`
+                }
+                style={{ color: '#000000', textDecoration: 'none' }}>
                 <span>{submission.title}</span>
               </Link>
-              <Link to={submission.siteUrl} style={{ textDecoration: 'none' }}>
+              <Link
+                to={submission.siteUrl}
+                style={{
+                  textDecoration: 'none',
+                  display: submission.site === '' ? 'none' : ''
+                }}>
                 <span style={{ fontSize: 12, color: '#828282' }}>( {submission.site} )</span>
               </Link>
             </div>

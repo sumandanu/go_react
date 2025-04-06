@@ -15,11 +15,11 @@ const ListNews: React.FC<Props> = (props) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <ol>
-        {props.data.map((list) =>
+        {props.data.map((list, idx) =>
           props?.type === 'comment' ? (
-            <ItemComment {...(list as IComment)} />
+            <ItemComment {...(list as IComment)} key={idx} />
           ) : (
-            <Item {...(list as INews)} />
+            <Item {...(list as INews)} key={idx} />
           )
         )}
       </ol>

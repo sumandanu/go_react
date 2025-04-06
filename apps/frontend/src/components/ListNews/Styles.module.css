@@ -1,6 +1,9 @@
 a {
   text-decoration: none;
-  all: unset;
+}
+
+a span:hover {
+  color: orangered;
 }
 
 .hidden {
@@ -45,6 +48,7 @@ a {
   font-family: Verdana, Geneva, sans-serif;
   font-size: 10pt;
   color: #222020;
+  word-break: break-all;
 }
 
 .siteText {
@@ -60,4 +64,16 @@ a {
   padding: 0px;
   width: fit-content;
   background-color: transparent;
+}
+
+li {
+  display: block;
+}
+
+li:before {
+  content: attr(value) ' ';
+  vertical-align: top;
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 10pt;
+  color: #222020;
 }

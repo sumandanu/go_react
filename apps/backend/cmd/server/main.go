@@ -56,9 +56,9 @@ func main() {
 	{
 		api.GET("/health", healthCheck)
 		api.GET("/news", scrapeController.ScrapeNews)
-		api.GET("/newest", scrapeController.ScrapeNewest)
-		api.GET("/front", scrapeController.ScrapeFront)
-		api.GET("/newcomments", scrapeController.ScrapeNewcomments)
+		api.GET("/newest", scrapeController.ScrapeNews)
+		api.GET("/front", scrapeController.ScrapeNews)
+		api.GET("/newcomments", scrapeController.ScrapeComments)
 		api.GET("/item", scrapeController.ScrapeItemcomments)
 		api.GET("/ask", scrapeController.ScrapeAsks)
 		api.GET("/show", scrapeController.ScrapeShow)
