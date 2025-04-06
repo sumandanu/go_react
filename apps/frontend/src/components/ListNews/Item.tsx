@@ -11,7 +11,9 @@ const Item: React.FC<INews> = (props) => {
         </Link>
         <div className={styles.content}>
           <div className={styles.title}>
-            <Link to={`${props.titleUrl}`} replace>
+            <Link
+              to={props.titleUrl?.startsWith('https') ? props.titleUrl : `/${props.titleUrl}`}
+              replace>
               <span className={styles.titleText}>{props.title}</span>
             </Link>
             <Link to={`/${props.siteUrl}`} className={`${!props.siteUrl ? styles.hidden : ''}`}>
