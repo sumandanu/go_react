@@ -17,4 +17,4 @@ type News struct {
 	PastUrl       string `json:"pastUrl"`
 	Comments   	  string `json:"comments"`
 	CommentsUrl   string `json:"commentsUrl"`
-  }
+}
